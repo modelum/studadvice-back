@@ -19,4 +19,4 @@ jobs:
           cache: maven
 
       - name: Compile application
-        run: ./mvnw -B compile
+        run: bash ./mvnw -B compile
