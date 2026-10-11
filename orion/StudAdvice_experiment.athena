@@ -1,0 +1,78 @@
+Schema StudAdvice:1
+
+Root entity AdministrativeProcess
+{
+  +id: Identifier,
+  name: String,
+  description: String,
+  imageId: String,
+  educations: List<String>,
+  minAge: Integer,
+  maxAge: Integer,
+  nationalities: List<String>,
+  universities: List<String>,
+  steps: aggr<Step>*,
+  category: String,
+  startDate: String,
+  endDate: String,
+  type: String
+}
+
+Root entity Category
+{
+  +id: Identifier,
+  name: String,
+  description: String,
+  imageId: String,
+  color: String,
+  administrativeProcesses: ref<AdministrativeProcess as Identifier>*
+}
+
+Root entity Deal
+{
+  +id: Identifier,
+  title: String,
+  description: String,
+  category: String,
+  imageId: String,
+  startDate: String,
+  endDate: String,
+  rating: Integer,
+  url: String,
+  numberOfRating: Integer
+}
+
+Root entity Faq
+{
+  +id: Identifier,
+  question: String,
+  response: String,
+  imageId: String
+}
+
+Root entity RequiredDocument
+{
+  +id: Identifier,
+  name: String,
+  description: String,
+  imageId: String,
+  url: String
+}
+
+Entity Step
+{
+  stepNumber: Integer,
+  name: String,
+  description: String,
+  imageId: String,
+  requiredDocuments: ref<RequiredDocument as Identifier>*,
+  resources: aggr<ResourceDto>*
+}
+
+Entity ResourceDto
+{
+  name: String,
+  url: String,
+  image: String,
+  description: String
+}
