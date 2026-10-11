@@ -1,2 +1,2 @@
-- description: M_STU_DE_01_studadvice_delete_faq-query-suite
+- description: M_STU_CR_01_studadvice_cast_step_requireddocuments_to_string-query-suite
 - queries: .
