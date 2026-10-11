@@ -1,0 +1,5 @@
+M_STU_CA_01_studadvice_cast_deal_rating_to_string operations
+
+USING StudAdvice:1
+
+CAST ATTR Deal::rating TO String

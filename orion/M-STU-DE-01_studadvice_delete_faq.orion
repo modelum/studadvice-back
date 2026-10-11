@@ -1,0 +1,5 @@
+M_STU_DE_01_studadvice_delete_faq operations
+
+USING StudAdvice:1
+
+DELETE ENTITY Faq

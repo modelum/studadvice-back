@@ -1,0 +1,5 @@
+M_STU_RF_01_studadvice_rename_deal_enddate_to_expirationdate operations
+
+USING StudAdvice:1
+
+RENAME Deal::endDate TO expirationDate
