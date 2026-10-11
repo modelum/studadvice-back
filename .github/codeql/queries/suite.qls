@@ -1,2 +1,2 @@
-- description: M_STU_RF_01_studadvice_rename_deal_enddate_to_expirationdate-query-suite
+- description: M_STU_DF_01_studadvice_delete_administrativeprocess_minage-query-suite
 - queries: .
