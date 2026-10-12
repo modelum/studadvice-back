@@ -1,2 +1,2 @@
-- description: M_STU_CA_01_studadvice_cast_deal_rating_to_string-query-suite
+- description: M_STU_DE_01_studadvice_delete_faq-query-suite
 - queries: .
