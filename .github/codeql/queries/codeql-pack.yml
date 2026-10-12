@@ -1,5 +1,5 @@
 # This is an automatically generated file.
-name: m-stu-ca-01-studadvice-cast-deal-rating-to-string-queries
+name: m-stu-cr-01-studadvice-cast-step-requireddocuments-to-string-queries
 version: 0.0.0
 dependencies:
   codeql/java-all: "*"

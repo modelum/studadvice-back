@@ -5,11 +5,19 @@ import orion_mongo
 
 /** Persistent domain type according to the selected adapter composition. */
 predicate isEntity(Class entity) {
-  isMongoDocument(entity)
+  isMongoPersistentEntity(entity)
 }
 
 predicate frameworkEntityMetadataAnnotation(Class entity, Annotation annotation) {
   isMongoEntityMetadataAnnotation(entity, annotation)
+}
+
+/** Metadata that independently carries the logical entity name being renamed. */
+predicate frameworkEntityRenameMetadataAnnotation(
+  Class entity, Annotation annotation
+) {
+  annotation = entity.getAnAnnotation() and
+  annotation.getType().hasQualifiedName("orionflow.disabled", "Entity")
 }
 
 predicate isFrameworkCollectionNameCall(
@@ -19,6 +27,14 @@ predicate isFrameworkCollectionNameCall(
 }
 
 predicate isQuery(Annotation annotation) {
+  isMongoQuery(annotation)
+}
+
+predicate isJpaFrameworkQuery(Annotation annotation) {
+  annotation.getType().hasQualifiedName("orionflow.disabled", "JpaQuery")
+}
+
+predicate isMongoFrameworkQuery(Annotation annotation) {
   isMongoQuery(annotation)
 }
 
@@ -39,7 +55,7 @@ predicate usesField(Expr queryValue, Field field) {
 }
 
 predicate frameworkQueryReferencesField(Annotation query, Field field) {
-  isMongoDocument(field.getDeclaringType()) and
+  isMongoPersistentEntity(field.getDeclaringType()) and
   isMongoQuery(query) and
   mongoQueryReferencesField(query.getValue("value"), field)
 }
@@ -53,14 +69,14 @@ predicate isCreateNamedQuery(MethodCall call) {
 }
 
 predicate frameworkMetadataReferencesField(Annotation annotation, Field field) {
-  isMongoDocument(field.getDeclaringType()) and
+  isMongoPersistentEntity(field.getDeclaringType()) and
   mongoMetadataReferencesField(annotation, field)
 }
 
 predicate isFrameworkFieldNameCall(
   MethodCall call, StringLiteral propertyName, Field field
 ) {
-  isMongoDocument(field.getDeclaringType()) and
+  isMongoPersistentEntity(field.getDeclaringType()) and
   isMongoFieldNameCall(call, propertyName, field)
 }
 
