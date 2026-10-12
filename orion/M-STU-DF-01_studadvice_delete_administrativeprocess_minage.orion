@@ -3,3 +3,4 @@ M_STU_DF_01_studadvice_delete_administrativeprocess_minage operations
 USING StudAdvice:1
 
 DELETE AdministrativeProcess::minAge
+
