@@ -1,5 +1,5 @@
 # This is an automatically generated file.
-name: m-stu-rf-01-studadvice-rename-deal-enddate-to-expirationdate-queries
+name: m-stu-re-01-studadvice-rename-administrativeprocess-to-procedure-queries
 version: 0.0.0
 dependencies:
   codeql/java-all: "*"
