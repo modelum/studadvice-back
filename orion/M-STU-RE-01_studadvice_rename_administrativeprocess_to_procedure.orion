@@ -3,4 +3,3 @@ M_STU_RE_01_studadvice_rename_administrativeprocess_to_procedure operations
 USING StudAdvice:1
 
 RENAME ENTITY AdministrativeProcess TO Procedure
-
