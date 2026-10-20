@@ -1,16 +1,16 @@
 /**
  * This is an automatically generated file
  *
- * @name Deleted Entity
+ * @name Renamed Entity
  * @kind alert
  * @problem.severity warning
- * @id java/orion/entity-deleted/0
+ * @id java/orion/entity-renamed/4
  */
  
 import java
 import utils
 
-/** Check if entity Faq is used in a selected framework query. */
+/** Check if entity Step is used in a selected framework query. */
 predicate usesOldEntity(Expr queryValue) {
   exists(string queryText |
     compileTimeStringValue(queryValue, queryText) and
@@ -18,80 +18,82 @@ predicate usesOldEntity(Expr queryValue) {
   // Mongo aggregation/look-up collection references. The entity name is a
   // generated literal, never an AST-derived regex fragment.
   queryText.regexpMatch(
-    "(?i).*(from|collection)\\s*['\"]?\\s*[:=,(]\\s*['\"]?Faq\\b.*"
+    "(?i).*(from|collection)\\s*['\"]?\\s*[:=,(]\\s*['\"]?Step\\b.*"
   )
     )
   )
 }
 
-from Class entity, Location usageLoc, string message
+from Class oldEntity, Location usageLoc, string message, string newName
 where
-  entity.hasName("Faq") and
-  isEntity(entity) and
+  oldEntity.hasName("Step") and
+  isEntity(oldEntity) and
+  newName = "Phase" and
   (
     (
-      usageLoc = entity.getLocation() and
+      usageLoc = oldEntity.getLocation() and
       message =
-        "Entity '" + entity.getName() + "' is marked for deletion."
+        "Entity '" + oldEntity.getName() +
+        "' will be renamed to '" + newName + "'."
     )
 
     or
-    // Explicit constructor declarations are separate rename/delete sites.
-    // Compiler-provided default constructors have no source location and
-    // are intentionally excluded by declaresEntityConstructor.
     exists(Constructor constructor |
-      declaresEntityConstructor(constructor, entity) and
+      declaresEntityConstructor(constructor, oldEntity) and
       usageLoc = constructor.getLocation() and
       message =
-        "Explicit constructor of entity '" + entity.getName() +
-        "' becomes invalid when the entity is deleted."
+        "Explicit constructor of entity '" + oldEntity.getName() +
+        "' must use the new name '" + newName + "'."
     )
 
     or
-    // Any source type reference resolved to the affected entity. This
-    // covers fields, generic arguments, parameters, returns, locals,
-    // supertypes, interfaces and repository declarations.
+    // Any source type reference resolved to the affected entity.
     exists(TypeAccess typeReference |
-      referencesEntityType(typeReference, entity) and
+      referencesEntityType(typeReference, oldEntity) and
       not exists(ClassInstanceExpr creation |
         creation.getTypeName() = typeReference
       ) and
       usageLoc = typeReference.getLocation() and
       message =
-        "Resolved type reference to entity '" + entity.getName() +
-        "' must be removed or replaced because the entity is being deleted."
+        "Resolved type reference to entity '" + oldEntity.getName() +
+        "' must be renamed to '" + newName + "'."
     )
 
     or
-    // Constructor calls are reported once at the complete construction,
-    // rather than again at their nested type access.
     exists(ClassInstanceExpr creation |
-      constructsEntity(creation, entity) and
+      constructsEntity(creation, oldEntity) and
       usageLoc = creation.getLocation() and
       message =
-        "Construction of entity '" + entity.getName() +
-        "' is invalid after the entity is deleted."
+        "Construction of entity '" + oldEntity.getName() +
+        "' must use the new name '" + newName + "'."
+    )
+
+    or
+    exists(Annotation metadata |
+      frameworkEntityRenameMetadataAnnotation(oldEntity, metadata) and
+      usageLoc = metadata.getLocation() and
+      message = "Explicit logical entity name '" + oldEntity.getName() +
+        "' must be reviewed for rename to '" + newName + "'."
     )
 
     or
     exists(MethodCall call, StringLiteral collectionName |
-      isFrameworkCollectionNameCall(call, collectionName, entity) and
+      isFrameworkCollectionNameCall(call, collectionName, oldEntity) and
       usageLoc = collectionName.getLocation() and
       message = "Persistence call references the stored collection for entity '" +
-        entity.getName() + "' which is marked for deletion."
+        oldEntity.getName() + "' which will be renamed to '" + newName + "'."
     )
 
     or
-    // A declared JPA named query is itself a schema dependency; it does
-    // not need a separate Spring Data @Query reference to be relevant.
+    // A declared JPA named query is itself a schema dependency.
     exists(Annotation nq, Expr queryValue |
       isNamedQuery(nq) and
       queryValue = nq.getValue("query") and
       usesOldEntity(queryValue) and
       usageLoc = nq.getLocation() and
       message =
-        "Named query uses entity '" + entity.getName() +
-        "' which is marked for deletion."
+        "Named query uses old entity name '" + oldEntity.getName() +
+        "' which will be renamed to '" + newName + "'."
     )
 
     or
@@ -102,8 +104,8 @@ where
       usesOldEntity(queryValue) and
       usageLoc = q.getTarget().getLocation() and
       message =
-        "Query uses entity '" + entity.getName() +
-        "' which is marked for deletion."
+        "Query uses old entity name '" + oldEntity.getName() +
+        "' which will be renamed to '" + newName + "'."
     )
 
     or
@@ -114,8 +116,8 @@ where
       usesOldEntity(queryValue) and
       usageLoc = call.getLocation() and
       message =
-        "Call to createQuery uses entity '" + entity.getName() +
-        "' which is marked for deletion."
+        "Call to createQuery uses old entity name '" + oldEntity.getName() +
+        "' which will be renamed to '" + newName + "'."
     )
 
     or
@@ -130,8 +132,8 @@ where
       usesOldEntity(queryValue) and
       usageLoc = call.getLocation() and
       message =
-        "Call to createNamedQuery uses entity '" + entity.getName() +
-        "' which is marked for deletion."
+        "Call to createNamedQuery uses old entity name '" + oldEntity.getName() +
+        "' which will be renamed to '" + newName + "'."
     )
   )
 

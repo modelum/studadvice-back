@@ -1,2 +1,2 @@
-- description: M_STU_DE_01_studadvice_delete_faq-query-suite
+- description: StudAdvice_multi_sco-query-suite
 - queries: .
