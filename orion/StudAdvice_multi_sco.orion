@@ -11,3 +11,4 @@ DELETE Offer::expirationDate
 // Entity and reference lineage
 RENAME ENTITY Step TO Phase
 CAST REF Phase::requiredDocuments TO String
+
