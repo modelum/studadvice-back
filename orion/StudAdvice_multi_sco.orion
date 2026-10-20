@@ -1,0 +1,13 @@
+StudAdvice_multi_sco operations
+
+USING StudAdvice:1
+
+// Entity, feature, and attribute lineage
+RENAME ENTITY Deal TO Offer
+RENAME Offer::endDate TO expirationDate
+CAST ATTR Offer::rating TO String
+DELETE Offer::expirationDate
+
+// Entity and reference lineage
+RENAME ENTITY Step TO Phase
+CAST REF Phase::requiredDocuments TO String
